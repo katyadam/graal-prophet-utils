@@ -17,6 +17,7 @@ public class NativeImageRunner {
     private final String entityOutput;
     private final String restcallOutput;
     private final String endpointOutput;
+    private final String methodOutput;
 
     private final Microservice ms;
     private final String niCommand;
@@ -36,6 +37,7 @@ public class NativeImageRunner {
         this.entityOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + ".json";
         this.restcallOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + "_restcalls.csv";
         this.endpointOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + "_endpoints.csv";
+        this.methodOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + "_methods.csv";
         System.out.println("classpath = " + classpath);
     }
 
@@ -97,6 +99,7 @@ public class NativeImageRunner {
         cmd.add("-H:ProphetEntityOutputFile=" + this.entityOutput);
         cmd.add("-H:ProphetRestCallOutputFile=" + this.restcallOutput);
         cmd.add("-H:ProphetEndpointOutputFile=" + this.endpointOutput);
+        cmd.add("-H:ProphetMethodOutputFile=" + this.methodOutput);
         // cmd.add("-R:MinHeapSize=4m"); 
         // cmd.add("-R:MaxHeapSize=15m");
         // cmd.add("-R:MaxNewSize=2m");   
