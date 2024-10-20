@@ -14,7 +14,9 @@ public class MethodCollector {
         try (var fw = new FileWriter(result)) {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setPrettyPrinting();
-            fw.write(gsonBuilder.create().toJson(jsonArray));
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("methods", jsonArray);
+            fw.write(gsonBuilder.create().toJson(jsonObject));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

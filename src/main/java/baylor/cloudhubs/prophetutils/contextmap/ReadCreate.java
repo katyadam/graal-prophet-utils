@@ -54,7 +54,8 @@ public class ReadCreate {
         File[] files = directory.listFiles();
         for (File f : files) {
             if (f.getName().substring(f.getName().length() - 5).equals(".json") && !f.getName().equals("entities.json")
-                    && !f.getName().equals("communicationGraph.json") && !f.getName().equals("system-context.json")) {
+                    && !f.getName().equals("communicationGraph.json") && !f.getName().equals("system-context.json")
+                    && !f.getName().equals("methods.json")) {
                 try {
                     Gson gson = new Gson();
                     FileReader reader = new FileReader(this.outputDirName + "/" + f.getName());
