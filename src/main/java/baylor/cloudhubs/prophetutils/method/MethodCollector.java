@@ -14,10 +14,10 @@ public class MethodCollector {
         try (var fw = new FileWriter(result)) {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setPrettyPrinting();
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.add("methods", msArray);
-            fw.write(gsonBuilder.create().toJson(jsonObject));
+            fw.write(gsonBuilder.create().toJson(msArray));
         } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.out.println("MethodCollector dump failed");
             throw new RuntimeException(e);
         }
     }
