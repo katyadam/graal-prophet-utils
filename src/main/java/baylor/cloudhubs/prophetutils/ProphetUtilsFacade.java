@@ -1,5 +1,6 @@
 package baylor.cloudhubs.prophetutils;
 
+import baylor.cloudhubs.prophetutils.method.MethodCollector;
 import baylor.cloudhubs.prophetutils.systemcontext.Module;
 import baylor.cloudhubs.prophetutils.systemcontext.SystemContext;
 import baylor.cloudhubs.prophetutils.contextmap.ReadCreate;
@@ -17,7 +18,7 @@ import java.util.*;
 
 public class ProphetUtilsFacade {
 
-    public final static Map<String, Integer> MS_TO_ANALYZE = new HashMap<>(); 
+    public final static Map<String, Integer> MS_TO_ANALYZE = new HashMap<>();
     public final static int RETRY_MAX = 3;
 
      private static SystemContext createSystemContext(List<Microservice> microservices, String graalProphetHome, String outputDir) {
@@ -32,7 +33,7 @@ public class ProphetUtilsFacade {
                 NativeImageRunner runner = new NativeImageRunner(info, graalProphetHome, outputDir);
                 System.out.println("RUNNING: " + info.getMicroserviceName());
                 Module module = runner.runProphetPlugin();
-                
+
                 //microservice analysis did NOT failed
                 if (module != null){
                     modules.add(module);
@@ -42,7 +43,6 @@ public class ProphetUtilsFacade {
 
             }
         }
-
         return new SystemContext(!microservices.isEmpty() ? microservices.get(0).getMicroserviceName() : "unknown", modules);
     }
 
@@ -60,7 +60,7 @@ public class ProphetUtilsFacade {
             return;
         }
         if (!microservices.isEmpty()){
-            
+
             initializeMap(microserviceSystem); //INIT MAP OF MICROSERVICES FOR ANALYSIS
 
             outputFolderName = "output_" + microserviceSystem.getSystemName();
@@ -69,7 +69,7 @@ public class ProphetUtilsFacade {
                 SystemContext ctx = createSystemContext(microservices, graalProphetHome, outputFolderName);
                 Gson gson = new Gson();
                 gson.toJson(ctx, new BufferedWriter(new FileWriter("./" + outputFolderName + "/system-context.json")));
-
+                MethodCollector.dump(new File(outputFolderName + "/methods.json"));
                 System.out.println("Beginning Linking and Communication Graph Creation\n");
                 boolean isTrainTicket = systemName.equals("trainticket");
                 LinkAlg linkAlgorithm = new LinkAlg(microservices, percentMatch, isTrainTicket);
@@ -84,7 +84,7 @@ public class ProphetUtilsFacade {
             System.err.println("WARNING: No microservices in system");
             return;
         }
-             
+
     }
 
     private static void createOutputDir(String outputFolderName) throws IOException{

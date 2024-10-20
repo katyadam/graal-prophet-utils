@@ -1,11 +1,13 @@
 package baylor.cloudhubs.prophetutils.nativeimage;
 
 import baylor.cloudhubs.prophetutils.ProphetUtilsFacade;
+import baylor.cloudhubs.prophetutils.method.MethodCollector;
 import baylor.cloudhubs.prophetutils.microservice.Microservice;
 import baylor.cloudhubs.prophetutils.systemcontext.Module;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -49,6 +51,7 @@ public class NativeImageRunner {
     private Module parseOutputFile() {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(entityOutput)) {
+            MethodCollector.parseMethodsCsv(new File(methodOutput));
             return gson.fromJson(reader, Module.class);
         } catch (FileNotFoundException fne) {
             System.out.println("WARNING: FILE '" + entityOutput + "' NOT FOUND, LIKELY ANALYSIS FAILED");
