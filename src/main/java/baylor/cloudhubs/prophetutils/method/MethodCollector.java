@@ -30,24 +30,11 @@ public class MethodCollector {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("name", cols[0]);
                 jsonObject.addProperty("bytecodeHash", cols[1]);
-                jsonObject.add("parameters", parseToJsonArray(cols[2]));
-                jsonObject.add("annotations", parseToJsonArray(cols[3]));
 
                 jsonArray.add(jsonObject);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static JsonArray parseToJsonArray(String array) {
-        String rawString = array.replace("[", "").replace("]", "");
-        JsonArray jsonArray = new JsonArray();
-        if (rawString.contains(",")) {
-            for (String item : rawString.split(",")) {
-                jsonArray.add(item.trim());
-            }
-        }
-        return jsonArray;
     }
 }
