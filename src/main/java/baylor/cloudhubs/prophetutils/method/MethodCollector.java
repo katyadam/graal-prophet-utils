@@ -31,7 +31,7 @@ public class MethodCollector {
             ms.addProperty("name", msName);
 
             while ((line = br.readLine()) != null) {
-                String[] cols = line.split(",");
+                String[] cols = line.split("\\|");
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("name", cols[0]);
                 jsonObject.addProperty("bytecodeHash", cols[1]);
