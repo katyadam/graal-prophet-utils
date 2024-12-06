@@ -23,6 +23,7 @@ public class NativeImageRunner {
 
     private final Microservice ms;
     private final String niCommand;
+    private final String callGraphOutputDir;
 
 
     public NativeImageRunner(Microservice ms, String graalProphetHome, String outputDir) {
@@ -36,6 +37,8 @@ public class NativeImageRunner {
             // retry without looping considering libs
             this.classpath = microservicePath + "/target/BOOT-INF/classes";
         }
+        this.callGraphOutputDir = "./" + outputDir + "/" + ms.getMicroserviceName();
+        new File(callGraphOutputDir).mkdirs();
         this.entityOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + ".json";
         this.restcallOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + "_restcalls.csv";
         this.endpointOutput = "./" + outputDir + "/" + ms.getMicroserviceName() + "_endpoints.csv";
@@ -95,7 +98,10 @@ public class NativeImageRunner {
         cmd.add("-H:+UnlockExperimentalVMOptions");
         cmd.add("-H:+ProphetPlugin");
         cmd.add("-H:-InlineBeforeAnalysis");
-        cmd.add("-H:+BuildOutputSilent");
+        cmd.add("-H:-BuildOutputSilent");
+        cmd.add("-H:+PrintAnalysisCallTree");
+        cmd.add("-H:PrintAnalysisCallTreeType=CSV");
+        cmd.add("-H:Path=" + this.callGraphOutputDir);
         cmd.add("-H:+AllowDeprecatedBuilderClassesOnImageClasspath");
         cmd.add("-H:ProphetMicroserviceName=" + this.ms.getMicroserviceName());
         cmd.add("-H:ProphetBasePackage=" + this.ms.getBasePackage());
