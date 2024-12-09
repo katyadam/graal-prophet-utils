@@ -84,7 +84,7 @@ public class NativeImageRunner {
             );
             objectMapper.writeValue(new File(this.callGraphOutputDir + "/reports/callGraph.json"), callGraph);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
