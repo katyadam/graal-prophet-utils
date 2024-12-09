@@ -1,0 +1,25 @@
+cat call_tree_methods.csv | grep queryForTravel,
+1955,queryForTravel,fdse.microservice.controller.BasicController,edu.fudan.common.entity.Travel org.springframework.http.HttpHeaders,org.springframework.http.HttpEntity,f.m.c.BC.queryForTravel,p,false
+40257,queryForTravel,fdse.microservice.service.BasicService,edu.fudan.common.entity.Travel org.springframework.http.HttpHeaders,edu.fudan.common.util.Response,f.m.s.BS.queryForTravel,pa,false
+
+cat call_tree_invokes.csv | grep ,1955,
+4941,1955,9,40230,false
+4943,1955,25,7824,true
+
+cat call_tree_methods.csv | grep ^40230,
+40230,info,org.slf4j.Logger,java.lang.String java.lang.Object,void,o.s.L.info,pa,false
+
+cat call_tree_methods.csv | grep ^7824,
+7824,ok,org.springframework.http.ResponseEntity,java.lang.Object,org.springframework.http.ResponseEntity,o.s.h.RE.ok,ps,false
+
+
+{
+    msName: ts-common,
+    nodes: [
+        { id: 1, method: fetchData() },
+        { id: 2, method: run() }
+    ],
+    links: [
+        { source: 1, target: 2 }
+    ]
+}
