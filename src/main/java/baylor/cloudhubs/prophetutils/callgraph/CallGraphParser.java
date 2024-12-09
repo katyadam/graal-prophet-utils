@@ -16,7 +16,12 @@ public class CallGraphParser {
             System.out.println("Parsing: " + filePath);
             try (BufferedReader reader = Files.newBufferedReader(filePath)) {
                 String line;
+                boolean skipFirst = true;
                 while ((line = reader.readLine()) != null) {
+                    if (skipFirst) {
+                        skipFirst = false;
+                        continue;
+                    }
                     Map.Entry<Long, Method> parsedMethod = Method.parseLine(line);
                     methods.put(parsedMethod.getKey(), parsedMethod.getValue());
                 }
@@ -37,7 +42,12 @@ public class CallGraphParser {
             System.out.println("Parsing: " + filePath);
             try (BufferedReader reader = Files.newBufferedReader(filePath)) {
                 String line;
+                boolean skipFirst = true;
                 while ((line = reader.readLine()) != null) {
+                    if (skipFirst) {
+                        skipFirst = false;
+                        continue;
+                    }
                     Map.Entry<Long, Invoke> parsedInvoke = Invoke.parseLine(line);
                     invokes.put(parsedInvoke.getKey(), parsedInvoke.getValue());
                 }

@@ -20,7 +20,12 @@ public class CallGraphLinker {
             System.out.println("Linking with: " + pathToTargets);
             try (BufferedReader reader = Files.newBufferedReader(pathToTargets)) {
                 String line;
+                boolean skipFirst = true;
                 while ((line = reader.readLine()) != null) {
+                    if (skipFirst) {
+                        skipFirst = false;
+                        continue;
+                    }
                     String[] ids = line.split(",");
                     Invoke invoke = invokes.get(Long.parseLong(ids[0]));
                     if (invoke == null) {
