@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 public class Method {
+    private final Long id;
     private final String name;
     private final String type;
     private final List<String> parameters;
@@ -26,6 +27,7 @@ public class Method {
         Long id = Long.parseLong(items[0]);
         List<String> params = Arrays.stream(items[3].split(" ")).collect(Collectors.toList());
         Method method = new Method(
+                Long.parseLong(items[0]),
                 items[1],  // name
                 items[2],  // type
                 params,    // parameters
