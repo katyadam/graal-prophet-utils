@@ -1,9 +1,11 @@
 package baylor.cloudhubs.prophetutils.nativeimage;
 
 import baylor.cloudhubs.prophetutils.ProphetUtilsFacade;
+import baylor.cloudhubs.prophetutils.callgraph.CallGraph;
 import baylor.cloudhubs.prophetutils.method.MethodCollector;
 import baylor.cloudhubs.prophetutils.microservice.Microservice;
 import baylor.cloudhubs.prophetutils.systemcontext.Module;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +50,7 @@ public class NativeImageRunner {
 
     public Module runProphetPlugin() {
         executeNativeImage();
+        saveCallGraph();
         return parseOutputFile();
     }
 
@@ -68,6 +71,19 @@ public class NativeImageRunner {
             return null;
         } catch (IOException e) {
             System.out.println("ERROR: IOException RUNNING ON " + this.ms.getMicroserviceName());
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void saveCallGraph() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            CallGraph callGraph = CallGraph.create(
+                    new File(this.callGraphOutputDir + "/reports").toPath(),
+                    ms.getMicroserviceName()
+            );
+            objectMapper.writeValue(new File(this.callGraphOutputDir + "/reports/callGraph.json"), callGraph);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
