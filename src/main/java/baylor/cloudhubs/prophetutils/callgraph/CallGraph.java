@@ -5,8 +5,8 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static baylor.cloudhubs.prophetutils.callgraph.CallGraphParser.parseInvokes;
@@ -18,7 +18,7 @@ public class CallGraph {
 
     private final String msName;
     private final Collection<Method> methods;
-    private Collection<Call> calls;
+    private final Collection<Call> calls;
 
     public void addCall(Call call) {
         this.calls.add(call);
@@ -28,11 +28,9 @@ public class CallGraph {
         try {
             Map<Long, Method> methods = parseMethods(dir.resolve("call_tree_methods.csv"));
             Map<Long, Invoke> invokes = parseInvokes(dir.resolve("call_tree_invokes.csv"));
-            return new CallGraph(
-                    msName,
-                    methods.values(),
-                    List.of()
-            );
+            CallGraph callGraph = new CallGraph(msName, methods.values(), new ArrayList<>());
+            CallGraphLinker.linkCallGraph(callGraph, methods, invokes, dir.resolve("call_tree_targets.csv")); // adding calls for each method
+            return callGraph;
         } catch (IOException e) {
             System.err.println("An error occurred while reading files: " + e.getMessage());
             e.printStackTrace();
