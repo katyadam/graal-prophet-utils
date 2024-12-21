@@ -80,7 +80,8 @@ public class NativeImageRunner {
         try {
             CallGraph callGraph = CallGraph.create(
                     new File(this.callGraphOutputDir + "/reports").toPath(),
-                    ms.getMicroserviceName()
+                    ms.getMicroserviceName(),
+                    ms.getBasePackage()
             );
             objectMapper.writeValue(new File(this.callGraphOutputDir + "/reports/callGraph.json"), callGraph);
         } catch (IOException e) {

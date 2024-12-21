@@ -17,6 +17,7 @@ import static baylor.cloudhubs.prophetutils.callgraph.CallGraphParser.parseMetho
 public class CallGraph {
 
     private final String msName;
+    private final String basePackage;
     private final Collection<Method> methods;
     private final Collection<Call> calls;
 
@@ -24,11 +25,11 @@ public class CallGraph {
         this.calls.add(call);
     }
 
-    public static CallGraph create(Path dir, String msName) throws IOException {
+    public static CallGraph create(Path dir, String msName, String basePackage) throws IOException {
         try {
-            Map<Long, Method> methods = parseMethods(dir.resolve("call_tree_methods.csv"));
-            Map<Long, Invoke> invokes = parseInvokes(dir.resolve("call_tree_invokes.csv"));
-            CallGraph callGraph = new CallGraph(msName, methods.values(), new ArrayList<>());
+            Map<Long, Method> methods = parseMethods(dir.resolve("call_tree_methods.csv"), basePackage);
+            Map<Long, Invoke> invokes = parseInvokes(dir.resolve("call_tree_invokes.csv"), methods);
+            CallGraph callGraph = new CallGraph(msName, basePackage, methods.values(), new ArrayList<>());
             CallGraphLinker.linkCallGraph(callGraph, methods, invokes, dir.resolve("call_tree_targets.csv")); // adding calls for each method
             return callGraph;
         } catch (IOException e) {

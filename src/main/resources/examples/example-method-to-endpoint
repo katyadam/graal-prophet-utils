@@ -1,0 +1,21 @@
+{
+  "name": "findContactsByAccountId",
+  "type": "contacts.controller.ContactsController",
+  "parameters": [
+    "java.lang.String",
+    "org.springframework.http.HttpHeaders"
+  ],
+  "returnType": "org.springframework.http.HttpEntity",
+  "display": "c.c.CC.findContactsByAccountId",
+  "flags": "p",
+  "entryPoint": false
+}
+
+ts-contacts-service,
+contacts.controller.ContactsController,
+contacts.controller.ContactsController.findContactsByAccountId,
+@PathVariable_String_accountId&@RequestHeader_HttpHeaders_headers,
+api/v1/contactservice/contacts/account/{accountId},
+GET,
+class org.springframework.http.HttpEntity,
+false

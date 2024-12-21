@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class CallGraphParser {
 
-    public static Map<Long, Method> parseMethods(Path filePath) throws IOException {
+    public static Map<Long, Method> parseMethods(Path filePath, String basePackage) throws IOException {
         Map<Long, Method> methods = new HashMap<>();
 
         if (Files.exists(filePath)) {
@@ -23,7 +23,9 @@ public class CallGraphParser {
                         continue;
                     }
                     Map.Entry<Long, Method> parsedMethod = Method.parseLine(line);
-                    methods.put(parsedMethod.getKey(), parsedMethod.getValue());
+                    if (parsedMethod.getValue().getType().startsWith(basePackage)) {
+                        methods.put(parsedMethod.getKey(), parsedMethod.getValue());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -35,7 +37,7 @@ public class CallGraphParser {
         return methods;
     }
 
-    public static Map<Long, Invoke> parseInvokes(Path filePath) throws IOException {
+    public static Map<Long, Invoke> parseInvokes(Path filePath, Map<Long, Method> parsedMethods) throws IOException {
         Map<Long, Invoke> invokes = new HashMap<>();
 
         if (Files.exists(filePath)) {
@@ -49,7 +51,13 @@ public class CallGraphParser {
                         continue;
                     }
                     Map.Entry<Long, Invoke> parsedInvoke = Invoke.parseLine(line);
-                    invokes.put(parsedInvoke.getKey(), parsedInvoke.getValue());
+                    // If invoke source method and its target are within the basePackage, as defined in parseMethods,
+                    // then we can add this method into collected invokes.
+                    // This ensures that call graph will consist only methods defined by user.
+                    if (parsedMethods.containsKey(parsedInvoke.getValue().getMethodId())
+                            && parsedMethods.containsKey(parsedInvoke.getValue().getTargetId())) {
+                        invokes.put(parsedInvoke.getKey(), parsedInvoke.getValue());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -27,7 +27,7 @@ public class CallGraphLinker {
                         continue;
                     }
                     String[] ids = line.split(",");
-                    Invoke invoke = invokes.get(Long.parseLong(ids[0]));
+                    Invoke invoke = invokes.getOrDefault(Long.parseLong(ids[0]), null);
                     if (invoke == null) {
                         continue;
                     }
