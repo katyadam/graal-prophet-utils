@@ -35,6 +35,7 @@ public class CallGraphLinker {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                throw e;
             }
         }
     }

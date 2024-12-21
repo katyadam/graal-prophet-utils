@@ -61,6 +61,7 @@ public class CallGraphParser {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                throw e;
             }
         } else {
             System.out.println("File not found: " + filePath);
