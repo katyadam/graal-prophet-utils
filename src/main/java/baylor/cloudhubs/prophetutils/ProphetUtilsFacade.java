@@ -66,10 +66,10 @@ public class ProphetUtilsFacade {
             outputFolderName = "output_" + microserviceSystem.getSystemName();
             try {
 				createOutputDir(outputFolderName);
-                SystemContext ctx = createSystemContext(microservices, graalProphetHome, outputFolderName);
-                Gson gson = new Gson();
-                gson.toJson(ctx, new BufferedWriter(new FileWriter("./" + outputFolderName + "/system-context.json")));
-                MethodCollector.dump(new File(outputFolderName + "/methods.json"));
+//                SystemContext ctx = createSystemContext(microservices, graalProphetHome, outputFolderName);
+//                Gson gson = new Gson();
+//                gson.toJson(ctx, new BufferedWriter(new FileWriter("./" + outputFolderName + "/system-context.json")));
+//                MethodCollector.dump(new File(outputFolderName + "/methods.json"));
                 System.out.println("Beginning Linking and Communication Graph Creation\n");
                 boolean isTrainTicket = systemName.equals("trainticket");
                 LinkAlg linkAlgorithm = new LinkAlg(microservices, percentMatch, isTrainTicket);
