@@ -70,8 +70,10 @@ public class ProphetUtilsFacade {
 //                Gson gson = new Gson();
 //                gson.toJson(ctx, new BufferedWriter(new FileWriter("./" + outputFolderName + "/system-context.json")));
 //                MethodCollector.dump(new File(outputFolderName + "/methods.json"));
-                System.out.println("Beginning Linking and Communication Graph Creation\n");
+                System.out.println("Beginning Linking and Communication Graph Creation DEBUG\n");
                 boolean isTrainTicket = systemName.equals("trainticket");
+                System.out.println("Is train ticket: " + isTrainTicket);
+                System.out.println("percent match: " + percentMatch);
                 LinkAlg linkAlgorithm = new LinkAlg(microservices, percentMatch, isTrainTicket);
                 linkAlgorithm.calculateLinks("./" + outputFolderName);
                 ReadCreate r = new ReadCreate(outputFolderName, isTrainTicket);

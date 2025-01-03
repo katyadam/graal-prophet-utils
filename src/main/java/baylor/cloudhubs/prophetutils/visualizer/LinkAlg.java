@@ -22,7 +22,7 @@ public class LinkAlg {
     private final int RESTCALL_CSV_SCHEMA_LENGTH = 7;
 
     public LinkAlg(List<Microservice> microservices) {
-        for (Microservice mi : microservices){
+        for (Microservice mi : microservices) {
             nodes.add(new Node(mi.getMicroserviceName()));
         }
     }
@@ -37,7 +37,7 @@ public class LinkAlg {
 
     public void calculateLinks(String dir) throws IOException, InterruptedException {
         // read from output dir and create list of all files *endpoints.csv and *restcalls.csv
-        
+
         File outputDir = new File(dir);
         File[] files = outputDir.listFiles();
         ArrayList<Endpoint> endpoints = new ArrayList<>();
@@ -51,6 +51,7 @@ public class LinkAlg {
 
         for (File f : files) {
             if (f.getName().endsWith("_restcalls.csv")) {
+                System.out.println("Parsing restCalls for: " + f.getName());
                 parseRestCalls(f, endpoints);
             }
         }
@@ -68,7 +69,7 @@ public class LinkAlg {
         linksJsonString.substring(0, linksJsonString.length() - 2); //remove "}]"
         String combinedJson = "{\"nodes\": " + nodesJsonString + ", \"links\": " + linksJsonString + "}";
         // System.out.println("COMBINED JSON =\n\n" + combinedJson);
-        
+
         try (FileWriter fileWriter = new FileWriter(dir + "/communicationGraph.json")) {
             fileWriter.write(combinedJson);
         } catch (IOException e) {
@@ -84,7 +85,7 @@ public class LinkAlg {
     private ArrayList<Endpoint> parseEndpoints(File csv) throws IOException {
         FileReader fileReader = new FileReader(csv);
         BufferedReader br = new BufferedReader(fileReader);
-        
+
         ArrayList<Endpoint> endpoints = new ArrayList<>();
 
         String line;
@@ -94,7 +95,7 @@ public class LinkAlg {
             //     br.close();
             //     throw new RuntimeException("Endpoint line parsed does not have " + ENDPOINT_CSV_SCHEMA_LENGTH + " items");
             // }
-            
+
             // CSV SCHEMA
             //   0   ,        1          ,       2     ,    3  ,      4    ,     5  ,    6      ,      7
             //msName, endpointInClassName, parentMethod, arguments, path, httpMethod, returnType, isCollection
@@ -102,16 +103,16 @@ public class LinkAlg {
             // for (String s : items){
             //     System.out.println("\t" + s);
             // }
-            System.out.println("items = " + Arrays.toString(items));
+//            System.out.println("items = " + Arrays.toString(items));
             Endpoint end = new Endpoint(
-                items[5],
-                items[2],
-                Arrays.asList(items[3].split("&")),
-                items[6],
-                items[4],
-                Boolean.parseBoolean(items[7]),
-                items[1],
-                items[0]
+                    items[5],
+                    items[2],
+                    Arrays.asList(items[3].split("&")),
+                    items[6],
+                    items[4],
+                    Boolean.parseBoolean(items[7]),
+                    items[1],
+                    items[0]
             );
             endpoints.add(end);
             //ADD ENDPOINT MS 
@@ -170,7 +171,7 @@ public class LinkAlg {
         // close file
         br.close();
         fileReader.close();
-
+        System.out.println("Got requests: " + Arrays.toString(requests.toArray()));
         // loop through parsed requests
         for (Request r : requests) {
 
@@ -218,7 +219,7 @@ public class LinkAlg {
             }
 
         }
-
+        System.out.println("Starting to create links");
         // create the links
         for (Map.Entry<Request, Endpoint> reqs : requestEndpointMap.entrySet()) {
             Request r = reqs.getKey();
@@ -226,7 +227,7 @@ public class LinkAlg {
 
             // create the link
             Link l = new Link(r.getMsName(), e.getMsName(), new ArrayList<>());
-
+            System.out.println("Created new link: " + l);
             // set missing fields in the request
             r.setEndpointMsName(e.getMsName());
             r.setTargetEndpointUri(e.getPath());
@@ -257,18 +258,18 @@ public class LinkAlg {
         short d[][] = new short[a.length() + 1][b.length() + 1];
 
         // Initialising first column:
-        for(short i = 0; i <= a.length(); i++)
+        for (short i = 0; i <= a.length(); i++)
             d[i][0] = i;
 
         // Initialising first row:
-        for(short j = 0; j <= b.length(); j++)
+        for (short j = 0; j <= b.length(); j++)
             d[0][j] = j;
 
         // Applying the algorithm:
         short insertion, deletion, replacement;
         for (short i = 1; i <= a.length(); i++) {
             for (short j = 1; j <= b.length(); j++) {
-                if(a.charAt(i - 1) == (b.charAt(j - 1)))
+                if (a.charAt(i - 1) == (b.charAt(j - 1)))
                     d[i][j] = d[i - 1][j - 1];
                 else {
                     insertion = d[i][j - 1];
@@ -286,9 +287,9 @@ public class LinkAlg {
 
     // Helper function used by findDistance()
     private short findMin(short x, short y, short z) {
-        if(x <= y && x <= z)
+        if (x <= y && x <= z)
             return x;
-        if(y <= x && y <= z)
+        if (y <= x && y <= z)
             return y;
         else
             return z;
