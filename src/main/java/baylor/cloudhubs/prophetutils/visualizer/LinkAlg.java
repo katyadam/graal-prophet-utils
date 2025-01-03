@@ -220,6 +220,7 @@ public class LinkAlg {
 
         }
         System.out.println("Starting to create links");
+        System.out.println(requestEndpointMap.entrySet());
         // create the links
         for (Map.Entry<Request, Endpoint> reqs : requestEndpointMap.entrySet()) {
             Request r = reqs.getKey();
