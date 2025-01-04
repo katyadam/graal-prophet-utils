@@ -2,6 +2,7 @@ package baylor.cloudhubs.prophetutils.nativeimage;
 
 import baylor.cloudhubs.prophetutils.ProphetUtilsFacade;
 import baylor.cloudhubs.prophetutils.callgraph.CallGraph;
+import baylor.cloudhubs.prophetutils.callgraph.CallGraphCollector;
 import baylor.cloudhubs.prophetutils.method.MethodCollector;
 import baylor.cloudhubs.prophetutils.microservice.Microservice;
 import baylor.cloudhubs.prophetutils.systemcontext.Module;
@@ -27,7 +28,6 @@ public class NativeImageRunner {
     private final String niCommand;
     private final String callGraphOutputDir;
 
-
     public NativeImageRunner(Microservice ms, String graalProphetHome, String outputDir) {
         this.niCommand = graalProphetHome + "/bin/native-image";
         this.ms = ms;
@@ -50,14 +50,14 @@ public class NativeImageRunner {
 
     public Module runProphetPlugin() {
         executeNativeImage();
-        saveCallGraph();
+        CallGraphCollector.saveCallGraph(this.callGraphOutputDir, ms);
+        MethodCollector.parseMethodsCsv(new File(methodOutput));
         return parseOutputFile();
     }
 
     private Module parseOutputFile() {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(entityOutput)) {
-            MethodCollector.parseMethodsCsv(new File(methodOutput));
             return gson.fromJson(reader, Module.class);
         } catch (FileNotFoundException fne) {
             System.out.println("WARNING: FILE '" + entityOutput + "' NOT FOUND, LIKELY ANALYSIS FAILED");
@@ -72,20 +72,6 @@ public class NativeImageRunner {
         } catch (IOException e) {
             System.out.println("ERROR: IOException RUNNING ON " + this.ms.getMicroserviceName());
             throw new RuntimeException(e);
-        }
-    }
-
-    private void saveCallGraph() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            CallGraph callGraph = CallGraph.create(
-                    new File(this.callGraphOutputDir + "/reports").toPath(),
-                    ms.getMicroserviceName(),
-                    ms.getBasePackage()
-            );
-            objectMapper.writeValue(new File(this.callGraphOutputDir + "/reports/callGraph.json"), callGraph);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

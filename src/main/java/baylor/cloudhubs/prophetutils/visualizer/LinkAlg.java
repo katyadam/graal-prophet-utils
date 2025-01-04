@@ -138,7 +138,12 @@ public class LinkAlg {
 
         return addCurlyStr;
     }
-
+//ts-basic-service,
+// fdse.microservice.service.BasicServiceImpl,
+// fdse.microservice.service.BasicServiceImpl.checkStationsExists,
+// ImageHeapConstant<org.springframework.http.HttpMethod, reachable: false, reader installed: true, compressed: false, backed: false>ImageHeapConstant<java.lang.Class, reachable: false, reader installed: false, compressed: false, backed: true>,
+// ,
+// org.springframework.http.HttpEntity,false,false,null,0,false
     private void parseRestCalls(File csv, ArrayList<Endpoint> endpoints) throws IOException {
         Map<Request, Endpoint> requestEndpointMap = new HashMap<>();
 
