@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CallGraphCollector {
@@ -25,5 +26,9 @@ public class CallGraphCollector {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<CallGraph> getCollectedCallGraphs() {
+        return Collections.unmodifiableList(callGraphs);
     }
 }

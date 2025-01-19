@@ -27,10 +27,10 @@ public class CallGraph {
 
     public static CallGraph create(Path dir, String msName, String basePackage) throws IOException {
         try {
-            Map<Long, Method> methods = parseMethods(dir.resolve("call_tree_methods.csv"), basePackage);
+            Map<Long, Method> methods = parseMethods(dir.resolve("call_tree_methods.csv"), msName, basePackage);
             Map<Long, Invoke> invokes = parseInvokes(dir.resolve("call_tree_invokes.csv"), methods);
             CallGraph callGraph = new CallGraph(msName, basePackage, methods.values(), new ArrayList<>());
-            CallGraphLinker.linkCallGraph(callGraph, methods, invokes, dir.resolve("call_tree_targets.csv")); // adding calls for each method
+            CallGraphLinker.linkCallGraph(callGraph, invokes, dir.resolve("call_tree_targets.csv")); // adding calls for each method
             return callGraph;
         } catch (IOException e) {
             System.err.println("An error occurred while reading files: " + e.getMessage());

@@ -22,7 +22,12 @@ public class Method {
     private final String flags;
     private final boolean isEntryPoint;
 
-    public static Map.Entry<Long, Method> parseLine(String line) {
+    private final String microservice;
+    private boolean isEndpointMethod;
+    private String endpointURI;
+    private String httpMethod;
+
+    public static Map.Entry<Long, Method> parseLine(String line, String msName) {
         String[] items = line.split(",");
         Long id = Long.parseLong(items[0]);
         List<String> params = Arrays.stream(items[3].split(" ")).collect(Collectors.toList());
@@ -34,10 +39,20 @@ public class Method {
                 items[4],  // returnType
                 items[5],  // display
                 items[6],  // flags
-                Boolean.parseBoolean(items[7]) // isEntryPoint
+                Boolean.parseBoolean(items[7]), // isEntryPoint,
+                msName,
+                false,
+                null,
+                null
         );
 
         return Map.entry(id, method);
+    }
+
+    public void setMethodEndpointInfo(Boolean isEndpointMethod, String endpointURI, String httpType) {
+        this.isEndpointMethod = isEndpointMethod;
+        this.endpointURI = endpointURI;
+        this.httpMethod = httpType;
     }
 
 }

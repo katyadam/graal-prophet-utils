@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class CallGraphParser {
 
-    public static Map<Long, Method> parseMethods(Path filePath, String basePackage) throws IOException {
+    public static Map<Long, Method> parseMethods(Path filePath, String msName, String basePackage) throws IOException {
         Map<Long, Method> methods = new HashMap<>();
 
         if (Files.exists(filePath)) {
@@ -22,7 +22,7 @@ public class CallGraphParser {
                         skipFirst = false;
                         continue;
                     }
-                    Map.Entry<Long, Method> parsedMethod = Method.parseLine(line);
+                    Map.Entry<Long, Method> parsedMethod = Method.parseLine(line, msName);
                     if (parsedMethod.getValue().getType().startsWith(basePackage)) {
                         methods.put(parsedMethod.getKey(), parsedMethod.getValue());
                     }

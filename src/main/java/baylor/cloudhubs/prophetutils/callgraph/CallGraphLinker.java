@@ -12,7 +12,6 @@ public class CallGraphLinker {
 
     public static void linkCallGraph(
             CallGraph callGraph,
-            Map<Long, Method> methods,
             Map<Long, Invoke> invokes,
             Path pathToTargets
     ) throws IOException {
