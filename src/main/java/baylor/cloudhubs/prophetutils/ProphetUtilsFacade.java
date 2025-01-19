@@ -81,15 +81,14 @@ public class ProphetUtilsFacade {
                 linkAlgorithm.calculateLinks("./" + outputFolderName);
                 ReadCreate r = new ReadCreate(outputFolderName, isTrainTicket);
                 r.readIn();
-                SystemCallGraph systemCallGraph = CallGraphConnector.connect(CallGraphCollector.getCollectedCallGraphs(), linkAlgorithm.getEndpointsMap());
-                ArrayList<Link> msLinks = linkAlgorithm.getMsLinks();
-                System.out.println("DONE");
+                SystemCallGraph systemCallGraph = CallGraphConnector.mergeCallGraphs(CallGraphCollector.getCollectedCallGraphs(), linkAlgorithm.getEndpointsMap());
+                systemCallGraph.addInterserviceLinks(linkAlgorithm.getMsLinks());
+                systemCallGraph.dump("./" + outputFolderName + "/systemCallGraph.json");
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
             System.err.println("WARNING: No microservices in system");
-            return;
         }
 
     }
