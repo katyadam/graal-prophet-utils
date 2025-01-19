@@ -12,6 +12,7 @@ public class CallGraphLinker {
 
     public static void linkCallGraph(
             CallGraph callGraph,
+            Map<Long, Method> methods,
             Map<Long, Invoke> invokes,
             Path pathToTargets
     ) throws IOException {
@@ -30,7 +31,9 @@ public class CallGraphLinker {
                     if (invoke == null) {
                         continue;
                     }
-                    callGraph.addCall(new Call(invoke.getMethodId(), Long.parseLong(ids[1])));
+                    var source = methods.get(invoke.getMethodId());
+                    var target = methods.get(Long.parseLong(ids[1]));
+                    callGraph.addCall(new Call(source.getMethodSignature(), target.getMethodSignature(), false));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

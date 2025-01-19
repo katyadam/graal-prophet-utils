@@ -55,4 +55,8 @@ public class Method {
         this.httpMethod = httpType;
     }
 
+    public String getMethodSignature() {
+        return this.microservice + "/" + this.type + "." + this.name;
+    }
+
 }

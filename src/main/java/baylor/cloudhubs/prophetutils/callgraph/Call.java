@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Call {
-    private final Long source;
-    private final Long target;
+    private final String source;
+    private final String target;
+    private final Boolean isConnectedViaEndpoint;
 }

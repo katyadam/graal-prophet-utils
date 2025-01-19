@@ -13,7 +13,7 @@ public class CallGraphConnector {
         for (CallGraph callGraph : callGraphs) {
             List<Method> updatedMethods = callGraph.getMethods().stream()
                     .map(method -> {
-                        var endpoint = endpointsMap.get(createEndpointKey(method));
+                        var endpoint = endpointsMap.get(method.getMethodSignature());
                         if (endpoint != null) {
                             method.setMethodEndpointInfo(true, endpoint.getPath(), endpoint.getHttpMethod());
                         }
@@ -25,9 +25,4 @@ public class CallGraphConnector {
         }
         return systemCallGraph;
     }
-
-    private static String createEndpointKey(Method method) {
-        return method.getMicroservice() + "/" + method.getType() + "." + method.getName();
-    }
-
 }
