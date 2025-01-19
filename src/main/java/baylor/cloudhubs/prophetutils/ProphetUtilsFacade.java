@@ -7,6 +7,7 @@ import baylor.cloudhubs.prophetutils.method.MethodCollector;
 import baylor.cloudhubs.prophetutils.systemcontext.Module;
 import baylor.cloudhubs.prophetutils.systemcontext.SystemContext;
 import baylor.cloudhubs.prophetutils.contextmap.ReadCreate;
+import baylor.cloudhubs.prophetutils.visualizer.Link;
 import baylor.cloudhubs.prophetutils.visualizer.LinkAlg;
 import baylor.cloudhubs.prophetutils.microservice.MicroserviceSystem;
 import baylor.cloudhubs.prophetutils.microservice.Microservice;
@@ -81,6 +82,7 @@ public class ProphetUtilsFacade {
                 ReadCreate r = new ReadCreate(outputFolderName, isTrainTicket);
                 r.readIn();
                 SystemCallGraph systemCallGraph = CallGraphConnector.connect(CallGraphCollector.getCollectedCallGraphs(), linkAlgorithm.getEndpointsMap());
+                ArrayList<Link> msLinks = linkAlgorithm.getMsLinks();
                 System.out.println("DONE");
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();

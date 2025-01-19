@@ -26,11 +26,15 @@
       "basePackage": "food",
       "microserviceName": "ts-station-food-service"
     },
-    
     {
       "baseDir": "$MS_ROOT/ts-user-service",
       "basePackage": "user",
       "microserviceName": "ts-user-service"
+    },
+    {
+      "baseDir": "$MS_ROOT/ts-contacts-service",
+      "basePackage": "contacts",
+      "microserviceName": "ts-contacts-service"
     }
   ]
 }
