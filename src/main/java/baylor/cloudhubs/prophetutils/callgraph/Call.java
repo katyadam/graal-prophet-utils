@@ -8,6 +8,6 @@ import lombok.Getter;
 public class Call {
     private final String source;
     private final String target;
-    private final Boolean isInterserviceLink;
+    private final Boolean isInterserviceCall;
     private final String httpMethod;
 }

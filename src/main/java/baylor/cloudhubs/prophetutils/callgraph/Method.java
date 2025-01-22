@@ -21,6 +21,7 @@ public class Method {
     private final String display;
     private final String flags;
     private final boolean isEntryPoint;
+    private final String bytecodeHash;
 
     private final String microservice;
     private boolean isEndpointMethod;
@@ -40,6 +41,7 @@ public class Method {
                 items[5],  // display
                 items[6],  // flags
                 Boolean.parseBoolean(items[7]), // isEntryPoint,
+                items[8],
                 msName,
                 false,
                 null,
