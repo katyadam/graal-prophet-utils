@@ -36,8 +36,6 @@ public class CallGraphLinker {
                     callGraph.addCall(new Call(
                             source.getMethodSignature(),
                             target.getMethodSignature(),
-                            source.getBytecodeHash(),
-                            target.getBytecodeHash(),
                             false,
                             null));
                 }
