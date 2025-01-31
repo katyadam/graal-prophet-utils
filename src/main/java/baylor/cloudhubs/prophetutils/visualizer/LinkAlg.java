@@ -181,7 +181,7 @@ public class LinkAlg {
                     items[4],
                     items[5],
                     Boolean.parseBoolean(items[6]),
-                    items[7]
+                    items[11]
             );
             //ADD REQUEST MS 
             // this.nodes.add(new Node(req.getMsName()));
