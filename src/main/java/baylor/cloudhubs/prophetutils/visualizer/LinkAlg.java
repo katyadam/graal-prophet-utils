@@ -216,9 +216,15 @@ public class LinkAlg {
 
             // find the specific endpoint being called
             for (Endpoint e : endpoints) {
-                StringBuilder endpointURI = new StringBuilder(e.getPath());
-                if (!e.getPath().startsWith("/")) {
-                    endpointURI.append('/');
+                StringBuilder endpointURI = new StringBuilder();
+                if (r.getUri().startsWith(r.getMsName())) {
+                    endpointURI.append(e.getMsName());
+                    if (!e.getPath().startsWith("/")) {
+                        endpointURI.append('/');
+                    }
+                    endpointURI.append(e.getPath());
+                } else {
+                    endpointURI.append(e.getPath());
                 }
 //                String endpointURI = e.getMsName() + "/" + e.getPath();
 //                boolean endpointHasCurlyBraces = endpointURI.contains("{") && endpointURI.contains("}");
