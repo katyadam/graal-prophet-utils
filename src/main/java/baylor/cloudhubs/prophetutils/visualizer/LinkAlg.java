@@ -217,7 +217,7 @@ public class LinkAlg {
             // find the specific endpoint being called
             for (Endpoint e : endpoints) {
                 StringBuilder endpointURI = new StringBuilder();
-                if (r.getUri().startsWith(r.getMsName())) {
+                if (r.getUri().startsWith(e.getMsName())) {
                     endpointURI.append(e.getMsName());
                     if (!e.getPath().startsWith("/")) {
                         endpointURI.append('/');
