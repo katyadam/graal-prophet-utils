@@ -206,14 +206,18 @@ public class LinkAlg {
 
             // find the specific endpoint being called
             for (Endpoint e : endpoints) {
-
-                String endpointURI = e.getMsName() + "/" + e.getPath();
+                StringBuilder endpointURI = new StringBuilder(e.getMsName());
+                if (!e.getPath().startsWith("/")) {
+                    endpointURI.append('/');
+                }
+                endpointURI.append(e.getPath());
+//                String endpointURI = e.getMsName() + "/" + e.getPath();
 //                boolean endpointHasCurlyBraces = endpointURI.contains("{") && endpointURI.contains("}");
 //
 //                if (restHasCurlyBraces && !endpointHasCurlyBraces)
 //                    continue;
 
-                currDist = findDistance(endpointURI, restCallURI);
+                currDist = findDistance(endpointURI.toString(), restCallURI);
                 if (e.getHttpMethod().equals(r.getType()) && !e.getMsName().equals(r.getMsName()) && minDist > currDist) {
                     minDist = currDist;
                     closestMatch = e;
