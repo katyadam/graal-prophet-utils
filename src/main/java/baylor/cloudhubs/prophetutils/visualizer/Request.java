@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @EqualsAndHashCode
@@ -16,13 +18,13 @@ public class Request {
     private String targetEndpointUri;
     private Boolean isCollection;
     private String parentMethod;
+    private List<String> parentMethodParameters;
     private String msName;
     private String restCallInClassName;
-    private String bytecodeHash;
     private String endpointBytecodeHash;
 
     public Request(String msName, String restCallInClassName, String parentMethod,
-                   String uri, String httpType, String requestReturn, Boolean isCollection, String bytecodeHash) {
+                   String uri, String httpType, String requestReturn, Boolean isCollection, List<String> parentMethodParameters) {
         this.type = httpType;
         this.uri = uri;
         this.requestReturn = requestReturn;
@@ -30,7 +32,7 @@ public class Request {
         this.msName = msName;
         this.parentMethod = parentMethod;
         this.restCallInClassName = restCallInClassName;
-        this.bytecodeHash = bytecodeHash;
+        this.parentMethodParameters = parentMethodParameters;
     }
 
     @Override
@@ -46,7 +48,11 @@ public class Request {
                 ", parentMethod='" + parentMethod + '\'' +
                 ", msName='" + msName + '\'' +
                 ", restCallInClassName='" + restCallInClassName + '\'' +
-                ", bytecodeHash='" + bytecodeHash + '\'' +
                 "\n}\n";
     }
+
+    public String getRequestSignature() {
+        return this.msName + "/" + this.getParentMethod() + "(" + String.join(", ", parentMethodParameters) + ")";
+    }
+
 }

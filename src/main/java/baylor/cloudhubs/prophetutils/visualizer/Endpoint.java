@@ -14,7 +14,6 @@ import java.util.List;
 public class Endpoint {
     private String httpMethod;
     private String parentMethod;
-    private String bytecodeHash;
     private List<String> arguments;
     private String returnType;
     private String path;
@@ -41,7 +40,6 @@ public class Endpoint {
         return "Endpoint{\n" +
                 "httpMethod='" + httpMethod + '\'' +
                 ", parentMethod='" + parentMethod + '\'' +
-                ", bytecodeHash='" + bytecodeHash + '\'' +
                 ", arguments=" + arguments +
                 ", returnType='" + returnType + '\'' +
                 ", path='" + path + '\'' +
@@ -49,5 +47,9 @@ public class Endpoint {
                 ", endpointInClassName='" + endpointInClassName + '\'' +
                 ", msName='" + msName + '\'' +
                 "\n}\n";
+    }
+
+    public String getEndpointSignature() {
+        return this.msName + "/" + this.getParentMethod() + "(" + String.join(", ", arguments) + ")";
     }
 }

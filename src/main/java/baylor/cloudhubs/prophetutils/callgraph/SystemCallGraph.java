@@ -33,10 +33,8 @@ public class SystemCallGraph {
         for (Link link : links) {
             for (Request req : link.getRequests()) {
                 var newInterserviceCall = new Call(
-                        req.getMsName() + "/" + req.getParentMethod(),
-                        req.getEndpointMsName() + "/" + req.getEndpointFunction(),
-                        req.getBytecodeHash(),
-                        req.getEndpointBytecodeHash(),
+                        req.getRequestSignature(),
+                        req.getEndpointFunction(),
                         true,
                         req.getType()
                 );

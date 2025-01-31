@@ -111,8 +111,7 @@ public class LinkAlg {
             Endpoint end = new Endpoint(
                     items[5],
                     items[2],
-                    items[8],
-                    Arrays.asList(items[3].split("&")),
+                    Arrays.asList(items[3].split(" ")),
                     items[6],
                     items[4],
                     Boolean.parseBoolean(items[7]),
@@ -180,8 +179,8 @@ public class LinkAlg {
                     items[3],
                     items[4],
                     items[5],
-                    Boolean.parseBoolean(items[6]),
-                    items[11]
+                    Boolean.parseBoolean(items[7]),
+                    Arrays.asList(items[11].split(" "))
             );
             //ADD REQUEST MS 
             // this.nodes.add(new Node(req.getMsName()));
@@ -245,7 +244,6 @@ public class LinkAlg {
             // add request to endpoint map
             if (closestMatch != null && percent > minDist) {
                 requestEndpointMap.put(r, closestMatch);
-                r.setBytecodeHash(closestMatch.getBytecodeHash());
             }
 
         }
@@ -261,7 +259,7 @@ public class LinkAlg {
             // set missing fields in the request
             r.setEndpointMsName(e.getMsName());
             r.setTargetEndpointUri(e.getPath());
-            r.setEndpointFunction(e.getParentMethod());
+            r.setEndpointFunction(e.getEndpointSignature());
 
             // if the link doesn't exist add it to the list
             if (!this.msLinks.contains(l)) {
