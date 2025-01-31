@@ -33,7 +33,13 @@ public class CallGraphLinker {
                     }
                     var source = methods.get(invoke.getMethodId());
                     var target = methods.get(Long.parseLong(ids[1]));
-                    callGraph.addCall(new Call(source.getMethodSignature(), target.getMethodSignature(), false, null));
+                    callGraph.addCall(new Call(
+                            source.getMethodSignature(),
+                            target.getMethodSignature(),
+                            source.getBytecodeHash(),
+                            target.getBytecodeHash(),
+                            false,
+                            null));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

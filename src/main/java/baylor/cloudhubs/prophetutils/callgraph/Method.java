@@ -58,7 +58,6 @@ public class Method {
     }
 
     public String getMethodSignature() {
-        return this.microservice + "/" + this.type + "." + this.name;
+        return this.microservice + "/" + this.type + "." + this.name + this.parameters;
     }
-
 }

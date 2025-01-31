@@ -3,7 +3,6 @@ package baylor.cloudhubs.prophetutils.callgraph;
 import baylor.cloudhubs.prophetutils.visualizer.Link;
 import baylor.cloudhubs.prophetutils.visualizer.Request;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +35,8 @@ public class SystemCallGraph {
                 var newInterserviceCall = new Call(
                         req.getMsName() + "/" + req.getParentMethod(),
                         req.getEndpointMsName() + "/" + req.getEndpointFunction(),
+                        req.getBytecodeHash(),
+                        req.getEndpointBytecodeHash(),
                         true,
                         req.getType()
                 );

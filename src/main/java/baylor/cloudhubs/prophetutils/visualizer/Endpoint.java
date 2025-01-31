@@ -14,6 +14,7 @@ import java.util.List;
 public class Endpoint {
     private String httpMethod;
     private String parentMethod;
+    private String bytecodeHash;
     private List<String> arguments;
     private String returnType;
     private String path;
@@ -21,13 +22,13 @@ public class Endpoint {
     private String endpointInClassName;
     private String msName;
 
-    private String toStringModified(List<String> args){
+    private String toStringModified(List<String> args) {
         StringBuilder sb = new StringBuilder();
-        
-        for (int i = 0; i < args.size(); i++){
+
+        for (int i = 0; i < args.size(); i++) {
             String str = args.get(i);
             sb.append(str.replaceAll(" ", "_"));
-            if (i < args.size() - 1){
+            if (i < args.size() - 1) {
                 sb.append("&");
             }
         }
@@ -40,6 +41,7 @@ public class Endpoint {
         return "Endpoint{\n" +
                 "httpMethod='" + httpMethod + '\'' +
                 ", parentMethod='" + parentMethod + '\'' +
+                ", bytecodeHash='" + bytecodeHash + '\'' +
                 ", arguments=" + arguments +
                 ", returnType='" + returnType + '\'' +
                 ", path='" + path + '\'' +

@@ -18,9 +18,11 @@ public class Request {
     private String parentMethod;
     private String msName;
     private String restCallInClassName;
+    private String bytecodeHash;
+    private String endpointBytecodeHash;
 
     public Request(String msName, String restCallInClassName, String parentMethod,
-                String uri, String httpType, String requestReturn, Boolean isCollection) {
+                   String uri, String httpType, String requestReturn, Boolean isCollection, String bytecodeHash) {
         this.type = httpType;
         this.uri = uri;
         this.requestReturn = requestReturn;
@@ -28,6 +30,7 @@ public class Request {
         this.msName = msName;
         this.parentMethod = parentMethod;
         this.restCallInClassName = restCallInClassName;
+        this.bytecodeHash = bytecodeHash;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class Request {
                 ", parentMethod='" + parentMethod + '\'' +
                 ", msName='" + msName + '\'' +
                 ", restCallInClassName='" + restCallInClassName + '\'' +
+                ", bytecodeHash='" + bytecodeHash + '\'' +
                 "\n}\n";
     }
 }

@@ -111,6 +111,7 @@ public class LinkAlg {
             Endpoint end = new Endpoint(
                     items[5],
                     items[2],
+                    items[8],
                     Arrays.asList(items[3].split("&")),
                     items[6],
                     items[4],
@@ -172,7 +173,16 @@ public class LinkAlg {
                 br.close();
                 throw new RuntimeException("Restcall line parsed does not have " + RESTCALL_CSV_SCHEMA_LENGTH + " items, its length is " + items.length);
             }
-            Request req = new Request(items[0], items[1], items[2], items[3], items[4], items[5], Boolean.parseBoolean(items[6]));
+            Request req = new Request(
+                    items[0],
+                    items[1],
+                    items[2],
+                    items[3],
+                    items[4],
+                    items[5],
+                    Boolean.parseBoolean(items[6]),
+                    items[7]
+            );
             //ADD REQUEST MS 
             // this.nodes.add(new Node(req.getMsName()));
             requests.add(req);
@@ -229,6 +239,7 @@ public class LinkAlg {
             // add request to endpoint map
             if (closestMatch != null && percent > minDist) {
                 requestEndpointMap.put(r, closestMatch);
+                r.setBytecodeHash(closestMatch.getBytecodeHash());
             }
 
         }
