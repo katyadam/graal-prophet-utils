@@ -52,7 +52,7 @@ public class Request {
     }
 
     public String getRequestSignature() {
-        return this.msName + "/" + this.getParentMethod() + "(" + String.join(", ", parentMethodParameters) + ")";
+        return this.msName + "/" + this.requestReturn + " " + this.getParentMethod() + "(" + String.join(", ", parentMethodParameters) + ")";
     }
 
 }

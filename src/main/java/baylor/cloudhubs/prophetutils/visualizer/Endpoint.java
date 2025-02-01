@@ -50,6 +50,6 @@ public class Endpoint {
     }
 
     public String getEndpointSignature() {
-        return this.msName + "/" + this.getParentMethod() + "(" + String.join(", ", arguments) + ")";
+        return this.msName + "/" + this.returnType.split(" ")[1] + " " + this.getParentMethod() + "(" + String.join(", ", arguments) + ")";
     }
 }
