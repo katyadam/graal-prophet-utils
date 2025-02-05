@@ -47,11 +47,6 @@
         "microserviceName": "ts-cancel-service"
       },
       {
-        "baseDir": "$MS_ROOT/ts-common",
-        "basePackage": "edu.fudan.common",
-        "microserviceName": "ts-common"
-      },
-      {
         "baseDir": "$MS_ROOT/ts-config-service",
         "basePackage": "config",
         "microserviceName": "ts-config-service"
