@@ -78,7 +78,7 @@ public class LinkAlg {
         }
 
         endpoints.forEach(
-                endpoint -> endpointsMap.put(endpoint.getMsName() + "/" + endpoint.getParentMethod(), endpoint)
+                endpoint -> endpointsMap.put(endpoint.getEndpointSignature(), endpoint)
         );
     }
 
