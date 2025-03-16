@@ -231,8 +231,17 @@ public class LinkAlg {
 //                if (restHasCurlyBraces && !endpointHasCurlyBraces)
 //                    continue;
 
+                if (endpointURI.toString().contains(restCallURI) || restCallURI.contains(endpointURI.toString())
+                ) {
+                    closestMatch = e;
+                    minDist = 0;
+                    break;
+                }
                 currDist = findDistance(endpointURI.toString(), restCallURI);
-                if (e.getHttpMethod().equals(r.getType()) && !e.getMsName().equals(r.getMsName()) && minDist > currDist) {
+                if ((e.getHttpMethod().equals(r.getType()) &&
+                        !e.getMsName().equals(r.getMsName()) &&
+                        minDist > currDist)
+                ) {
                     minDist = currDist;
                     closestMatch = e;
                     lengthOfLongerStr = Math.max(e.getPath().length(), uri.length());
