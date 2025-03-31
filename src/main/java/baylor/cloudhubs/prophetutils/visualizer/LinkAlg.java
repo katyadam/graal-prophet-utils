@@ -231,7 +231,8 @@ public class LinkAlg {
 //                if (restHasCurlyBraces && !endpointHasCurlyBraces)
 //                    continue;
 
-                if (endpointURI.toString().contains(restCallURI) || restCallURI.contains(endpointURI.toString())
+                if ((endpointURI.toString().contains(restCallURI) || restCallURI.contains(endpointURI.toString())) &&
+                        e.getHttpMethod().equals(r.getType()) && e.getMsName().equals(r.getMsName())
                 ) {
                     closestMatch = e;
                     minDist = 0;
