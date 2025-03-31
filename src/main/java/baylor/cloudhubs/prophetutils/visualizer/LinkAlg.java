@@ -225,18 +225,18 @@ public class LinkAlg {
                 } else {
                     endpointURI.append(e.getPath());
                 }
-//                String endpointURI = e.getMsName() + "/" + e.getPath();
-//                boolean endpointHasCurlyBraces = endpointURI.contains("{") && endpointURI.contains("}");
-//
-//                if (restHasCurlyBraces && !endpointHasCurlyBraces)
-//                    continue;
 
-                if ((endpointURI.toString().contains(restCallURI) || restCallURI.contains(endpointURI.toString())) &&
-                        e.getHttpMethod().equals(r.getType()) && e.getMsName().equals(r.getMsName())
-                ) {
-                    closestMatch = e;
-                    minDist = 0;
-                    break;
+                // in REST call
+                // i can have: api/v1/basicservice/basic/travel
+                // also this: api/v1/basicservice/basic/travels
+                // also this: ts-basic-service/api/v1/basicservice/basic/travels
+                // in ENDPOINT there is always this:
+                // {/}api/v1/basicservice/basic/travel
+
+                // this should fix the issue with prepend method from ts-prepend-other-service
+                // not calling correct endpoint
+                if (!restCallURI.contains(r.getMsName())) {
+                    restCallURI =  String.format(restCallURI.startsWith("/") ? "%s%s" : "%s/%s", r.getMsName(), restCallURI);
                 }
                 currDist = findDistance(endpointURI.toString(), restCallURI);
                 if ((e.getHttpMethod().equals(r.getType()) &&
