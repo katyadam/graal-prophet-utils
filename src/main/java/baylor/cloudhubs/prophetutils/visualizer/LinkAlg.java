@@ -235,9 +235,8 @@ public class LinkAlg {
 
                 // this should fix the issue with prepend method from ts-prepend-other-service
                 // not calling correct endpoint
-                if (!restCallURI.contains(r.getMsName())) {
-                    restCallURI =  String.format(restCallURI.startsWith("/") ? "%s%s" : "%s/%s", r.getMsName(), restCallURI);
-                }
+                restCallURI = getSanitizedRESTCallURI(restCallURI, r);
+
                 currDist = findDistance(endpointURI.toString(), restCallURI);
                 if ((e.getHttpMethod().equals(r.getType()) &&
                         !e.getMsName().equals(r.getMsName()) &&
@@ -289,6 +288,17 @@ public class LinkAlg {
         }
 
 
+    }
+
+    private String getSanitizedRESTCallURI(String initialURI, Request request) {
+        if (!initialURI.contains(request.getMsName())) {
+            initialURI = String.format(initialURI.startsWith("/") ? "%s%s" : "%s/%s", request.getMsName(), initialURI);
+        } else if (!initialURI.startsWith(request.getMsName())) {
+            int msNameIndex = initialURI.indexOf(request.getMsName());
+            initialURI = initialURI.substring(msNameIndex);
+        }
+
+        return initialURI;
     }
 
     // levenstein algorithm for two strings
