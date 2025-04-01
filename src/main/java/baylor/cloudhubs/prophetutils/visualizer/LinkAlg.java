@@ -14,6 +14,8 @@ public class LinkAlg {
     private ArrayList<Link> msLinks = new ArrayList<>();
     private Set<Node> nodes = new HashSet<>();
 
+    private List<Microservice> microservices;
+
     private double dissimilarityPercent = 0.3;
 
     private boolean isTrainTicket = false;
@@ -33,6 +35,7 @@ public class LinkAlg {
     // takes similarity percentage as a whole number or integer
     public LinkAlg(List<Microservice> microservices, int similarityPercentage, boolean isTrainTicket) {
         this(microservices);
+        this.microservices = microservices;
         this.dissimilarityPercent = 1.0 - (similarityPercentage / 100.0);
         this.isTrainTicket = isTrainTicket;
     }
@@ -234,11 +237,10 @@ public class LinkAlg {
                 // in ENDPOINT there is always this:
                 // {/}api/v1/basicservice/basic/travel
 
-                // this should fix the issue with prepend method from ts-prepend-other-service
-                // not calling correct endpoint
-                restCallURI = getSanitizedRESTCallURI(restCallURI, r);
-
-                currDist = findDistance(endpointURI.toString(), restCallURI);
+                currDist = findDistance(
+                        normalizeURI(endpointURI.toString()),
+                        normalizeURI(restCallURI)
+                );
                 if ((e.getHttpMethod().equals(r.getType()) &&
                         !e.getMsName().equals(r.getMsName()) &&
                         minDist > currDist)
@@ -289,17 +291,7 @@ public class LinkAlg {
 
 
     }
-
-    private String getSanitizedRESTCallURI(String initialRestCallURI, Request restCall) {
-        if (!initialRestCallURI.contains(restCall.getMsName())) {
-            initialRestCallURI = String.format(initialRestCallURI.startsWith("/") ? "%s%s" : "%s/%s", restCall.getMsName(), initialRestCallURI);
-        } else if (!initialRestCallURI.startsWith(restCall.getMsName())) {
-            int msNameIndex = initialRestCallURI.indexOf(restCall.getMsName());
-            initialRestCallURI = initialRestCallURI.substring(msNameIndex);
-        }
-
-        return initialRestCallURI;
-    }
+    
 
     // levenstein algorithm for two strings
     private int findDistance(String a, String b) {
@@ -345,5 +337,27 @@ public class LinkAlg {
 
     public Map<String, Endpoint> getEndpointsMap() {
         return endpointsMap;
+    }
+
+    // Creates normalized URI from rest call or endpoints URI, so the levenshtein algorithm would be more precise
+    private String normalizeURI(String uri) {
+        String resultUri = uri;
+        for (Microservice ms : microservices) {
+            String msName = ms.getMicroserviceName();
+            if (uri.contains(msName)) {
+                if (uri.startsWith(msName)) {
+                    resultUri = uri.substring(msName.length());
+                } else {
+                    String[] splittedURI = uri.split("/");
+                    if (splittedURI[0].contains(msName)) {
+                        int msNameOffset = uri.indexOf(msName);
+                        resultUri = uri.substring(msNameOffset + msName.length());
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        return resultUri.startsWith("/") ? resultUri : "/" + resultUri;
     }
 }
