@@ -230,6 +230,7 @@ public class LinkAlg {
                 // i can have: api/v1/basicservice/basic/travel
                 // also this: api/v1/basicservice/basic/travels
                 // also this: ts-basic-service/api/v1/basicservice/basic/travels
+                // also this: "SOME BAD STUFF: ts-basic-service/api/v1/basicservice/basic/travels"
                 // in ENDPOINT there is always this:
                 // {/}api/v1/basicservice/basic/travel
 
@@ -249,7 +250,6 @@ public class LinkAlg {
             }
 
             double percent = lengthOfLongerStr * dissimilarityPercent;
-
             // add request to endpoint map
             if (closestMatch != null && percent > minDist) {
                 requestEndpointMap.put(r, closestMatch);
@@ -290,15 +290,15 @@ public class LinkAlg {
 
     }
 
-    private String getSanitizedRESTCallURI(String initialURI, Request request) {
-        if (!initialURI.contains(request.getMsName())) {
-            initialURI = String.format(initialURI.startsWith("/") ? "%s%s" : "%s/%s", request.getMsName(), initialURI);
-        } else if (!initialURI.startsWith(request.getMsName())) {
-            int msNameIndex = initialURI.indexOf(request.getMsName());
-            initialURI = initialURI.substring(msNameIndex);
+    private String getSanitizedRESTCallURI(String initialRestCallURI, Request restCall) {
+        if (!initialRestCallURI.contains(restCall.getMsName())) {
+            initialRestCallURI = String.format(initialRestCallURI.startsWith("/") ? "%s%s" : "%s/%s", restCall.getMsName(), initialRestCallURI);
+        } else if (!initialRestCallURI.startsWith(restCall.getMsName())) {
+            int msNameIndex = initialRestCallURI.indexOf(restCall.getMsName());
+            initialRestCallURI = initialRestCallURI.substring(msNameIndex);
         }
 
-        return initialURI;
+        return initialRestCallURI;
     }
 
     // levenstein algorithm for two strings
