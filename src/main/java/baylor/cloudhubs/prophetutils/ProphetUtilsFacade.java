@@ -27,6 +27,7 @@ public class ProphetUtilsFacade {
 
     private static SystemContext createSystemContext(List<Microservice> microservices, String graalProphetHome, String outputDir) {
         Set<Module> modules = new HashSet<>();
+        long startTime = System.currentTimeMillis();
         while (!MS_TO_ANALYZE.isEmpty()) {
             for (Microservice info : microservices) {
                 //if the microservice is not in the MS_TO_ANALYZE, it has already been analyzed
@@ -47,7 +48,18 @@ public class ProphetUtilsFacade {
 
             }
         }
+        long endTime = System.currentTimeMillis();
+        logExtractionTime(startTime, endTime);
         return new SystemContext(!microservices.isEmpty() ? microservices.get(0).getMicroserviceName() : "unknown", modules);
+    }
+
+    private static void logExtractionTime(long start, long end) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("extraction-times.txt", true))) {
+            writer.write(String.format("Extraction Period: Start=%d ms, End=%d ms, Duration=%d ms%n",
+                    start, end, (end - start)));
+        } catch (IOException e) {
+            System.err.println("Failed to log extraction metrics: " + e.getMessage());
+        }
     }
 
     private static void initializeMap(MicroserviceSystem ar) {
