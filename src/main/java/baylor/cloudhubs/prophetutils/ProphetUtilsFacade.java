@@ -49,6 +49,7 @@ public class ProphetUtilsFacade {
             }
         }
         long endTime = System.currentTimeMillis();
+        System.out.println("LOGGING OUT TIME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!§");
         logExtractionTime(startTime, endTime);
         return new SystemContext(!microservices.isEmpty() ? microservices.get(0).getMicroserviceName() : "unknown", modules);
     }
