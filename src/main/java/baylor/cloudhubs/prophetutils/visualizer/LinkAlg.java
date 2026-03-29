@@ -14,6 +14,8 @@ public class LinkAlg {
     private ArrayList<Link> msLinks = new ArrayList<>();
     private Set<Node> nodes = new HashSet<>();
 
+    private List<Microservice> microservices;
+
     private double dissimilarityPercent = 0.3;
 
     private boolean isTrainTicket = false;
@@ -33,6 +35,7 @@ public class LinkAlg {
     // takes similarity percentage as a whole number or integer
     public LinkAlg(List<Microservice> microservices, int similarityPercentage, boolean isTrainTicket) {
         this(microservices);
+        this.microservices = microservices;
         this.dissimilarityPercent = 1.0 - (similarityPercentage / 100.0);
         this.isTrainTicket = isTrainTicket;
     }
@@ -225,19 +228,19 @@ public class LinkAlg {
                 } else {
                     endpointURI.append(e.getPath());
                 }
-//                String endpointURI = e.getMsName() + "/" + e.getPath();
-//                boolean endpointHasCurlyBraces = endpointURI.contains("{") && endpointURI.contains("}");
-//
-//                if (restHasCurlyBraces && !endpointHasCurlyBraces)
-//                    continue;
 
-                if (endpointURI.toString().contains(restCallURI) || restCallURI.contains(endpointURI.toString())
-                ) {
-                    closestMatch = e;
-                    minDist = 0;
-                    break;
-                }
-                currDist = findDistance(endpointURI.toString(), restCallURI);
+                // in REST call
+                // i can have: api/v1/basicservice/basic/travel
+                // also this: api/v1/basicservice/basic/travels
+                // also this: ts-basic-service/api/v1/basicservice/basic/travels
+                // also this: "SOME BAD STUFF: ts-basic-service/api/v1/basicservice/basic/travels"
+                // in ENDPOINT there is always this:
+                // {/}api/v1/basicservice/basic/travel
+
+                currDist = findDistance(
+                        normalizeURI(endpointURI.toString()),
+                        normalizeURI(restCallURI)
+                );
                 if ((e.getHttpMethod().equals(r.getType()) &&
                         !e.getMsName().equals(r.getMsName()) &&
                         minDist > currDist)
@@ -249,7 +252,6 @@ public class LinkAlg {
             }
 
             double percent = lengthOfLongerStr * dissimilarityPercent;
-
             // add request to endpoint map
             if (closestMatch != null && percent > minDist) {
                 requestEndpointMap.put(r, closestMatch);
@@ -289,6 +291,7 @@ public class LinkAlg {
 
 
     }
+    
 
     // levenstein algorithm for two strings
     private int findDistance(String a, String b) {
@@ -334,5 +337,27 @@ public class LinkAlg {
 
     public Map<String, Endpoint> getEndpointsMap() {
         return endpointsMap;
+    }
+
+    // Creates normalized URI from rest call or endpoints URI, so the levenshtein algorithm would be more precise
+    private String normalizeURI(String uri) {
+        String resultUri = uri;
+        for (Microservice ms : microservices) {
+            String msName = ms.getMicroserviceName();
+            if (uri.contains(msName)) {
+                if (uri.startsWith(msName)) {
+                    resultUri = uri.substring(msName.length());
+                } else {
+                    String[] splittedURI = uri.split("/");
+                    if (splittedURI[0].contains(msName)) {
+                        int msNameOffset = uri.indexOf(msName);
+                        resultUri = uri.substring(msNameOffset + msName.length());
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        return resultUri.startsWith("/") ? resultUri : "/" + resultUri;
     }
 }
